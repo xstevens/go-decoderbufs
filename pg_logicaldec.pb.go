@@ -9,12 +9,13 @@ It is generated from these files:
 	pg_logicaldec.proto
 
 It has these top-level messages:
+	Point
 	DatumMessage
 	RowMessage
 */
 package decoderbufs
 
-import proto "code.google.com/p/goprotobuf/proto"
+import proto "github.com/golang/protobuf/proto"
 import math "math"
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -57,6 +58,30 @@ func (x *Op) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+type Point struct {
+	X                *float64 `protobuf:"fixed64,1,req,name=x" json:"x,omitempty"`
+	Y                *float64 `protobuf:"fixed64,2,req,name=y" json:"y,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
+}
+
+func (m *Point) Reset()         { *m = Point{} }
+func (m *Point) String() string { return proto.CompactTextString(m) }
+func (*Point) ProtoMessage()    {}
+
+func (m *Point) GetX() float64 {
+	if m != nil && m.X != nil {
+		return *m.X
+	}
+	return 0
+}
+
+func (m *Point) GetY() float64 {
+	if m != nil && m.Y != nil {
+		return *m.Y
+	}
+	return 0
+}
+
 type DatumMessage struct {
 	ColumnName       *string  `protobuf:"bytes,1,opt,name=column_name" json:"column_name,omitempty"`
 	ColumnType       *int64   `protobuf:"varint,2,opt,name=column_type" json:"column_type,omitempty"`
@@ -67,6 +92,7 @@ type DatumMessage struct {
 	DatumBool        *bool    `protobuf:"varint,7,opt,name=datum_bool" json:"datum_bool,omitempty"`
 	DatumString      *string  `protobuf:"bytes,8,opt,name=datum_string" json:"datum_string,omitempty"`
 	DatumBytes       []byte   `protobuf:"bytes,9,opt,name=datum_bytes" json:"datum_bytes,omitempty"`
+	DatumPoint       *Point   `protobuf:"bytes,10,opt,name=datum_point" json:"datum_point,omitempty"`
 	XXX_unrecognized []byte   `json:"-"`
 }
 
@@ -133,6 +159,13 @@ func (m *DatumMessage) GetDatumString() string {
 func (m *DatumMessage) GetDatumBytes() []byte {
 	if m != nil {
 		return m.DatumBytes
+	}
+	return nil
+}
+
+func (m *DatumMessage) GetDatumPoint() *Point {
+	if m != nil {
+		return m.DatumPoint
 	}
 	return nil
 }
